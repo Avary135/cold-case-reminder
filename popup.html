@@ -3,16 +3,17 @@
 <head>
   <style>
     body { width: 250px; font-family: Arial, sans-serif; padding: 15px; }
-    h2 { color: #d9534f; font-size: 16px; text-align: center; }
+    h2 { color: #d9534f; font-size: 16px; text-align: center; margin-top: 0; }
+    #caseName { font-weight: bold; color: #333; }
     p { font-size: 13px; line-height: 1.4; }
-    button { background: #0275d8; color: white; border: none; padding: 10px; cursor: pointer; width: 100%; border-radius: 5px; font-weight: bold; }
+    button { background: #0275d8; color: white; border: none; padding: 10px; cursor: pointer; width: 100%; border-radius: 5px; font-weight: bold; margin-top: 10px; }
     button:hover { background: #025aa5; }
   </style>
 </head>
 <body>
-  <h2>Active Cold Case</h2>
-  <p><strong>Case:</strong> Jane Doe (1998)</p>
-  <p>Your information could be the missing piece to solving this case.</p>
+  <h2>Today's Cold Case</h2>
+  <p><strong>Case:</strong> <span id="caseName">Loading...</span></p>
+  <p id="caseDescription">Loading case details...</p>
   <button id="tipButton">Report a Tip Anonymously</button>
   
   <script src="popup.js"></script>
