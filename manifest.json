@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Cold Case Reminder",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Never forget the victims. Click to help solve a case.",
+  "permissions": ["notifications", "tabs"],
   "action": {
     "default_popup": "popup.html"
   }
