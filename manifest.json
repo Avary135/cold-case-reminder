@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Cold Case Reminder",
-  "version": "1.5",
+  "version": "1.6",
   "description": "Daily cold case notifications and reminders.",
   "permissions": [
     "notifications",
