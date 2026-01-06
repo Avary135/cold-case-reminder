@@ -1,21 +1,29 @@
-// This function sends the actual pop-up to the desktop
+// Function to send the notification to the desktop
 function showHomeScreenNotification() {
-  chrome.notifications.create({
+  chrome.notifications.create('coldCaseNotify', {
     type: 'basic',
     iconUrl: 'icon128.png',
     title: 'Cold Case Reminder Active',
-    message: 'Keeping justice in sight. A new cold case is featured every day. Click the pin icon to see today\'s case.',
+    message: 'Justice doesn\'t have an expiration date. Click here to see today\'s featured case.',
     priority: 2,
-    requireInteraction: true // This keeps the notification on the screen until you click it
+    requireInteraction: true 
   });
 }
 
-// 1. Pop up when the extension is first installed or updated
+// 1. Pop up when the extension is installed or reloaded
 chrome.runtime.onInstalled.addListener(() => {
   showHomeScreenNotification();
 });
 
-// 2. Pop up whenever the user opens Chrome
+// 2. Pop up whenever Chrome starts
 chrome.runtime.onStartup.addListener(() => {
   showHomeScreenNotification();
+});
+
+// 3. NEW: This makes the notification clickable!
+chrome.notifications.onClicked.addListener((notificationId) => {
+  if (notificationId === 'coldCaseNotify') {
+    // This opens the Crime Stoppers site automatically when they click the pop-up
+    chrome.tabs.create({ url: 'https://www.metrodenvercrimestoppers.com/' });
+  }
 });
