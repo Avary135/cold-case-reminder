@@ -1,20 +1,20 @@
-// This function creates the notification
-function sendColdCaseNotification() {
-    chrome.notifications.create({
-        type: 'basic',
-        iconUrl: 'icon128.png',
-        title: 'Daily Cold Case Update',
-        message: 'A new case has been featured. Click to view details and help seek justice.',
-        priority: 2
-    });
+// Function to create the notification
+function sendNotification() {
+  chrome.notifications.create({
+    type: 'basic',
+    iconUrl: 'icon128.png',
+    title: 'Daily Cold Case Alert',
+    message: 'A new cold case has been featured today. Click to help seek justice.',
+    priority: 2
+  });
 }
 
-// 1. Send a notification as soon as the extension is installed
+// Trigger when the extension is first installed
 chrome.runtime.onInstalled.addListener(() => {
-    sendColdCaseNotification();
+  sendNotification();
 });
 
-// 2. Send a notification whenever the browser is opened
+// Trigger every time Chrome starts up
 chrome.runtime.onStartup.addListener(() => {
-    sendColdCaseNotification();
+  sendNotification();
 });
