@@ -1,25 +1,21 @@
-// Function to create the notification
-function sendNotification() {
+// This function sends the actual pop-up to the desktop
+function showHomeScreenNotification() {
   chrome.notifications.create({
     type: 'basic',
     iconUrl: 'icon128.png',
-    title: 'Daily Cold Case Alert',
-    message: 'A new cold case has been featured. Help us seek justice.',
-    priority: 2
+    title: 'Cold Case Reminder Active',
+    message: 'Keeping justice in sight. A new cold case is featured every day. Click the pin icon to see today\'s case.',
+    priority: 2,
+    requireInteraction: true // This keeps the notification on the screen until you click it
   });
 }
 
-// 1. Create an alarm when installed
+// 1. Pop up when the extension is first installed or updated
 chrome.runtime.onInstalled.addListener(() => {
-  // This creates a timer to go off 1 minute after installation
-  chrome.alarms.create("presentationTimer", { delayInMinutes: 1 });
-  // Also send one immediately to test
-  sendNotification();
+  showHomeScreenNotification();
 });
 
-// 2. Listen for the alarm
-chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === "presentationTimer") {
-    sendNotification();
-  }
+// 2. Pop up whenever the user opens Chrome
+chrome.runtime.onStartup.addListener(() => {
+  showHomeScreenNotification();
 });
