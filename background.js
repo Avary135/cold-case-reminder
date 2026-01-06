@@ -1,6 +1,6 @@
-// Function to send the notification to the desktop
-function showHomeScreenNotification() {
-  chrome.notifications.create('coldCaseNotify', {
+// Function to create the notification
+function showNotification() {
+  chrome.notifications.create({
     type: 'basic',
     iconUrl: 'icon128.png',
     title: 'Cold Case Reminder Active',
@@ -10,20 +10,22 @@ function showHomeScreenNotification() {
   });
 }
 
-// 1. Pop up when the extension is installed or reloaded
+// 1. Show notification on Install/Reload
 chrome.runtime.onInstalled.addListener(() => {
-  showHomeScreenNotification();
+  showNotification();
 });
 
-// 2. Pop up whenever Chrome starts
+// 2. Show notification on Browser Startup
 chrome.runtime.onStartup.addListener(() => {
-  showHomeScreenNotification();
+  showNotification();
 });
 
-// 3. NEW: This makes the notification clickable!
-chrome.notifications.onClicked.addListener((notificationId) => {
-  if (notificationId === 'coldCaseNotify') {
-    // This opens the Crime Stoppers site automatically when they click the pop-up
-    chrome.tabs.create({ url: 'https://www.metrodenvercrimestoppers.com/' });
-  }
+// 3. IMPROVED CLICK LISTENER
+// Instead of checking for an ID, this tells Chrome: 
+// "If ANY notification from this extension is clicked, open the site."
+chrome.notifications.onClicked.addListener(() => {
+  chrome.tabs.create({ 
+    url: 'https://www.metrodenvercrimestoppers.com/',
+    active: true // This forces the new tab to jump to the front
+  });
 });
