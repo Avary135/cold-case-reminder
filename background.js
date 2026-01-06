@@ -4,17 +4,22 @@ function sendNotification() {
     type: 'basic',
     iconUrl: 'icon128.png',
     title: 'Daily Cold Case Alert',
-    message: 'A new cold case has been featured today. Click to help seek justice.',
+    message: 'A new cold case has been featured. Help us seek justice.',
     priority: 2
   });
 }
 
-// Trigger when the extension is first installed
+// 1. Create an alarm when installed
 chrome.runtime.onInstalled.addListener(() => {
+  // This creates a timer to go off 1 minute after installation
+  chrome.alarms.create("presentationTimer", { delayInMinutes: 1 });
+  // Also send one immediately to test
   sendNotification();
 });
 
-// Trigger every time Chrome starts up
-chrome.runtime.onStartup.addListener(() => {
-  sendNotification();
+// 2. Listen for the alarm
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === "presentationTimer") {
+    sendNotification();
+  }
 });
