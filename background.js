@@ -3,29 +3,34 @@ function showNotification() {
   chrome.notifications.create({
     type: 'basic',
     iconUrl: 'icon128.png',
-    title: 'Cold Case Reminder Active',
-    message: 'Justice doesn\'t have an expiration date. Click here to see today\'s featured case.',
+    title: 'Daily Cold Case Alert',
+    message: 'A new cold case has been featured today. Click to help seek justice.',
     priority: 2,
     requireInteraction: true 
   });
 }
 
-// 1. Show notification on Install/Reload
+// 1. Set the alarm when the extension is installed
 chrome.runtime.onInstalled.addListener(() => {
-  showNotification();
+  // Create an alarm that goes off every 1440 minutes (24 hours)
+  chrome.alarms.create("dailyCaseAlarm", {
+    delayInMinutes: 1, // First one pops up 1 minute after install
+    periodInMinutes: 1440 // Then repeat every 24 hours
+  });
+  showNotification(); // Show one immediately on install
 });
 
-// 2. Show notification on Browser Startup
-chrome.runtime.onStartup.addListener(() => {
-  showNotification();
+// 2. Listen for the alarm and show the notification
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === "dailyCaseAlarm") {
+    showNotification();
+  }
 });
 
-// 3. IMPROVED CLICK LISTENER
-// Instead of checking for an ID, this tells Chrome: 
-// "If ANY notification from this extension is clicked, open the site."
+// 3. Make the notification clickable
 chrome.notifications.onClicked.addListener(() => {
   chrome.tabs.create({ 
     url: 'https://www.metrodenvercrimestoppers.com/',
-    active: true // This forces the new tab to jump to the front
+    active: true 
   });
 });
