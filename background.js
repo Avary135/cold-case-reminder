@@ -1,36 +1,38 @@
-// Function to create the notification
+// Function to show the notification with the two buttons
 function showNotification() {
-  chrome.notifications.create({
+  chrome.notifications.create('coldCaseNotify', {
     type: 'basic',
     iconUrl: 'icon128.png',
     title: 'Daily Cold Case Alert',
-    message: 'A new cold case has been featured today. Click to help seek justice.',
+    message: 'Help seek justice today. View the case details or follow updates on Facebook.',
     priority: 2,
-    requireInteraction: true 
+    requireInteraction: true,
+    buttons: [
+      { title: 'Open Website' },
+      { title: 'Visit Facebook' }
+    ]
   });
 }
 
-// 1. Set the alarm when the extension is installed
+// 1. Show notification when the extension is installed or reloaded
 chrome.runtime.onInstalled.addListener(() => {
-  // Create an alarm that goes off every 1440 minutes (24 hours)
-  chrome.alarms.create("dailyCaseAlarm", {
-    delayInMinutes: 1, // First one pops up 1 minute after install
-    periodInMinutes: 1440 // Then repeat every 24 hours
-  });
-  showNotification(); // Show one immediately on install
+  showNotification();
 });
 
-// 2. Listen for the alarm and show the notification
-chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === "dailyCaseAlarm") {
-    showNotification();
+// 2. Logic to handle the button clicks
+chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex) => {
+  if (notificationId === 'coldCaseNotify') {
+    if (buttonIndex === 0) {
+      // First Button: Official Website
+      chrome.tabs.create({ url: 'https://www.metrodenvercrimestoppers.com/' });
+    } else if (buttonIndex === 1) {
+      // Second Button: Facebook Page
+      chrome.tabs.create({ url: 'https://www.facebook.com/metrodenvercrimestoppers/' });
+    }
   }
 });
 
-// 3. Make the notification clickable
+// 3. Optional: Clicking the notification text itself also opens the website
 chrome.notifications.onClicked.addListener(() => {
-  chrome.tabs.create({ 
-    url: 'https://www.metrodenvercrimestoppers.com/',
-    active: true 
-  });
+  chrome.tabs.create({ url: 'https://www.metrodenvercrimestoppers.com/' });
 });
